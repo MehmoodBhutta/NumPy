@@ -1,0 +1,1278 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/MehmoodBhutta/data-science-work/blob/main/titanic_dataset\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "-lRUlB8ckGj2"
+      },
+      "source": [
+        "# **Assignment 1-Part 2**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "_zvSPuJQWrYY",
+        "outputId": "44e71645-17d1-4589-abaf-7cde229bb1cd"
+      },
+      "execution_count": 77,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(\"/content/drive\", force_remount=True).\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "91GVrwUVkGj6"
+      },
+      "source": [
+        "Note: It should take you an estimated time of 2 hours to complete this part.\n",
+        "\n",
+        "\n",
+        "\n",
+        "# **Context about dataset**\n",
+        "\n",
+        "The titanic dataset is a record of passengers aboard the Titanic and their fates (whether or not they survived the incident). This includes socio-economic class divide between passengers, their ages, names, fares and even their passenger IDs. The principal source for data about Titanic passengers is the Encyclopedia Titanica. The datasets used here were begun by a variety of researchers. One of the original sources is Eaton & Haas (1994) Titanic: Triumph and Tragedy, Patrick Stephens Ltd, which includes a passenger list created by many researchers and edited by Michael A. Findlay.\n",
+        "\n",
+        "As we explore this data from titanic, it is your job to answer some pressing questions regarding the various age groups aboard, their economic statuses and survival rates in each gender. Following are some details about the variable to help you understand the data better. <br>\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "zw2KdQtZmesG"
+      },
+      "source": [
+        "## **VARIABLE DESCRIPTIONS** <br>\n",
+        "Pclass ->   Passenger Class  (1 = 1st; 2 = 2nd; 3 = 3rd) <br>\n",
+        "Survived ->  Did the passenger survive? (0 = No; 1 = Yes) <br>\n",
+        "Name ->  name <br>\n",
+        "Sex ->  sex       \n",
+        "Age ->  age  <br>\n",
+        "SibSp ->  Number of Siblings/Spouses Aboard <br>\n",
+        "Parch ->  Number of Parents/Children Aboard <br>\n",
+        "Ticket ->   Ticket Number <br>\n",
+        "Fare ->   Passenger Fare (British pound) <br>\n",
+        "Cabin ->   Cabin <br>\n",
+        "Embarked ->   Port of Embarkation (C = Cherbourg; Q = Queenstown; S = Southampton) <br>\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "bGBoRzfSkGj7"
+      },
+      "source": [
+        "# **Instructions**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 78,
+      "metadata": {
+        "id": "QvI4EVZ0k63-"
+      },
+      "outputs": [],
+      "source": [
+        "path = '/content/drive/MyDrive/dataset/titanic.csv'\n",
+        "df= pd.read_csv(path)\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "lVAq_jDtk_EC"
+      },
+      "source": [
+        "#**Importing relevant libraries and reading data**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 79,
+      "metadata": {
+        "id": "XQpfCRmDkGj-"
+      },
+      "outputs": [],
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import matplotlib\n",
+        "\n",
+        "df_main = pd.read_csv('titanic.csv')\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "YwfIFw57kGj_"
+      },
+      "source": [
+        "**Question 1:** Drop the `Cabin` column and save this new dataframe in a variable. Use this dataframe for all other questions."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 80,
+      "metadata": {
+        "id": "V0tHvoSvkGj_",
+        "scrolled": true,
+        "outputId": "cf656cfe-10b9-4318-8c1a-9f8b8108a274",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "count         204\n",
+              "unique        147\n",
+              "top       B96 B98\n",
+              "freq            4\n",
+              "Name: Cabin, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 80
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "df_main['Cabin'].describe()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "I3nNrA3HkGkA"
+      },
+      "source": [
+        "**Question 2:** Using the describe function, print the mean family size for this dataset."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 81,
+      "metadata": {
+        "id": "BEM1Ws20kGkB",
+        "outputId": "8bba839e-daa6-4b14-e76a-ec66606d598d",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 300
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "       Family_Size\n",
+              "count   891.000000\n",
+              "mean      0.904602\n",
+              "std       1.613459\n",
+              "min       0.000000\n",
+              "25%       0.000000\n",
+              "50%       0.000000\n",
+              "75%       1.000000\n",
+              "max      10.000000"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-d3921b5b-8079-4f79-90ec-104aa603adb9\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Family_Size</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>count</th>\n",
+              "      <td>891.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>mean</th>\n",
+              "      <td>0.904602</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>std</th>\n",
+              "      <td>1.613459</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>min</th>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>25%</th>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>50%</th>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>75%</th>\n",
+              "      <td>1.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>max</th>\n",
+              "      <td>10.000000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-d3921b5b-8079-4f79-90ec-104aa603adb9')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-d3921b5b-8079-4f79-90ec-104aa603adb9 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-d3921b5b-8079-4f79-90ec-104aa603adb9');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-6bb2d861-612b-43ba-828f-50289180fb44\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-6bb2d861-612b-43ba-828f-50289180fb44')\"\n",
+              "            title=\"Suggest charts.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-6bb2d861-612b-43ba-828f-50289180fb44 button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 81
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "df_main[['Family_Size']].describe()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "rNsli71-kGkC"
+      },
+      "source": [
+        "**Question 3:** What percentage of people aboard the ship were females?"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 82,
+      "metadata": {
+        "id": "ena7NRRbkGkD",
+        "outputId": "ff973c95-2b88-4aca-9e13-2ede739f769c",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Sex\n",
+              "female    314\n",
+              "male      577\n",
+              "dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 82
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "df_main[['Sex', 'Name']].groupby(['Sex']).size()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "FOJQ6fs0kGkD"
+      },
+      "source": [
+        "**Question 4:** Set the `PassengerID` of passengers as the index for this dataset."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 91,
+      "metadata": {
+        "id": "BOZeQTcwkGkD",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "71e62d1b-72f7-4320-ab2c-816a1f4e9418"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0        1\n",
+            "1        2\n",
+            "2        3\n",
+            "3        4\n",
+            "4        5\n",
+            "      ... \n",
+            "886    887\n",
+            "887    888\n",
+            "888    889\n",
+            "889    890\n",
+            "890    891\n",
+            "Name: passengerid, Length: 891, dtype: int64\n"
+          ]
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "Passenger_df = df_main['passengerid']\n",
+        "print(df_main['passengerid'])\n",
+        "# print(df_main.columns)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "N8cOTW2akGkE"
+      },
+      "source": [
+        "**Question 5:** Convert all column names to lowercase and print the head of the dataframe. Also, remove spaces within column names (if any)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 84,
+      "metadata": {
+        "id": "VfhK-9POkGkF",
+        "outputId": "90f32335-c632-4abb-8e38-fdff78146951",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "    age cabin embarked     fare  \\\n",
+            "0  22.0   NaN        S   7.2500   \n",
+            "1  38.0   C85        C  71.2833   \n",
+            "2  26.0   NaN        S   7.9250   \n",
+            "3  35.0  C123        S  53.1000   \n",
+            "4  35.0   NaN        S   8.0500   \n",
+            "\n",
+            "                                                name  parch  passengerid  \\\n",
+            "0                            Braund, Mr. Owen Harris      0            1   \n",
+            "1  Cumings, Mrs. John Bradley (Florence Briggs Th...      0            2   \n",
+            "2                             Heikkinen, Miss. Laina      0            3   \n",
+            "3       Futrelle, Mrs. Jacques Heath (Lily May Peel)      0            4   \n",
+            "4                           Allen, Mr. William Henry      0            5   \n",
+            "\n",
+            "   pclass     sex  sibsp  survived            ticket title  family_size  \n",
+            "0       3    male      1         0         A/5 21171    Mr            1  \n",
+            "1       1  female      1         1          PC 17599   Mrs            1  \n",
+            "2       3  female      0         1  STON/O2. 3101282  Miss            0  \n",
+            "3       1  female      1         1            113803   Mrs            1  \n",
+            "4       3    male      0         0            373450    Mr            0  \n"
+          ]
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "df_main.columns = df_main.columns.str.lower().str.replace(' ', '')\n",
+        "print(df_main.head())"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "6X9iI3chkGkH"
+      },
+      "source": [
+        "**Question 7 Part A:** Were those who had siblings and spouses on board more likely to survive than those who did not. Demonstrate the reasoning behind your answer through code."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 96,
+      "metadata": {
+        "id": "qTNh6rlqkGkI",
+        "outputId": "90e2566b-ecde-4aa5-eeaa-5174a8da28da",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Hassibsp\n",
+            "False    0.345395\n",
+            "True     0.466431\n",
+            "Name: survived, dtype: float64\n"
+          ]
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "df_main['Hassibsp'] = df_main['sibsp'] > 0\n",
+        "survival_rate_by_sibsp = df_main.groupby('Hassibsp')['survived'].mean()\n",
+        "print(survival_rate_by_sibsp)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "3er10R1iWotN"
+      },
+      "source": [
+        "**Question 7 Part B:** Answer as 'Yes' or 'No' based on your code above."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "wJaqr0B5WotN"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "kvmU2rbRkGkJ"
+      },
+      "source": [
+        "**Question 8:** Were males more likely than females to survive?"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 100,
+      "metadata": {
+        "id": "7h7WfHwBkGkJ",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "1f0e9496-fce1-4980-86a6-a3b2d5d61402"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "sex\n",
+            "female    0.742038\n",
+            "male      0.188908\n",
+            "Name: survived, dtype: float64\n"
+          ]
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "# print(df_main.columns)\n",
+        "survival_rates = df_main.groupby('sex')['survived'].mean()\n",
+        "\n",
+        "print(survival_rates)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "yLjh-bGfkGkK"
+      },
+      "source": [
+        "**Question 9:** Using the pandas iloc function, print the dataframe for ages between 5 to 20 and fare above 20."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 109,
+      "metadata": {
+        "id": "v-Nd1dW4kGkK",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "fe1a70d0-ef7e-4f4a-a93e-05a5de80568c"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "    Age Cabin Embarked     Fare  \\\n",
+            "0  22.0   NaN        S   7.2500   \n",
+            "1  38.0   C85        C  71.2833   \n",
+            "\n",
+            "                                                Name  Parch  PassengerId  \\\n",
+            "0                            Braund, Mr. Owen Harris      0            1   \n",
+            "1  Cumings, Mrs. John Bradley (Florence Briggs Th...      0            2   \n",
+            "\n",
+            "   Pclass     Sex  SibSp  Survived     Ticket Title  Family_Size  \n",
+            "0       3    male      1         0  A/5 21171    Mr            1  \n",
+            "1       1  female      1         1   PC 17599   Mrs            1  \n",
+            "      Age Cabin Embarked     Fare  \\\n",
+            "0    22.0   NaN        S   7.2500   \n",
+            "1    38.0   C85        C  71.2833   \n",
+            "2    26.0   NaN        S   7.9250   \n",
+            "3    35.0  C123        S  53.1000   \n",
+            "4    35.0   NaN        S   8.0500   \n",
+            "..    ...   ...      ...      ...   \n",
+            "886  27.0   NaN        S  13.0000   \n",
+            "887  19.0   B42        S  30.0000   \n",
+            "888  22.0   NaN        S  23.4500   \n",
+            "889  26.0  C148        C  30.0000   \n",
+            "890  32.0   NaN        Q   7.7500   \n",
+            "\n",
+            "                                                  Name  Parch  PassengerId  \\\n",
+            "0                              Braund, Mr. Owen Harris      0            1   \n",
+            "1    Cumings, Mrs. John Bradley (Florence Briggs Th...      0            2   \n",
+            "2                               Heikkinen, Miss. Laina      0            3   \n",
+            "3         Futrelle, Mrs. Jacques Heath (Lily May Peel)      0            4   \n",
+            "4                             Allen, Mr. William Henry      0            5   \n",
+            "..                                                 ...    ...          ...   \n",
+            "886                              Montvila, Rev. Juozas      0          887   \n",
+            "887                       Graham, Miss. Margaret Edith      0          888   \n",
+            "888           Johnston, Miss. Catherine Helen \"Carrie\"      2          889   \n",
+            "889                              Behr, Mr. Karl Howell      0          890   \n",
+            "890                                Dooley, Mr. Patrick      0          891   \n",
+            "\n",
+            "     Pclass     Sex  SibSp  Survived            Ticket Title  Family_Size  \n",
+            "0         3    male      1         0         A/5 21171    Mr            1  \n",
+            "1         1  female      1         1          PC 17599   Mrs            1  \n",
+            "2         3  female      0         1  STON/O2. 3101282  Miss            0  \n",
+            "3         1  female      1         1            113803   Mrs            1  \n",
+            "4         3    male      0         0            373450    Mr            0  \n",
+            "..      ...     ...    ...       ...               ...   ...          ...  \n",
+            "886       2    male      0         0            211536   Rev            0  \n",
+            "887       1  female      0         1            112053  Miss            0  \n",
+            "888       3  female      1         0        W./C. 6607  Miss            3  \n",
+            "889       1    male      0         1            111369    Mr            0  \n",
+            "890       3    male      0         0            370376    Mr            0  \n",
+            "\n",
+            "[891 rows x 14 columns]\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "<ipython-input-109-7e941b0f62c0>:4: SettingWithCopyWarning: \n",
+            "A value is trying to be set on a copy of a slice from a DataFrame.\n",
+            "Try using .loc[row_indexer,col_indexer] = value instead\n",
+            "\n",
+            "See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy\n",
+            "  selected['age','fare'] = [5, 20]\n"
+          ]
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "selected = df.iloc[0:2, :]\n",
+        "print(selected)\n",
+        "selected['age','fare'] = [5, 20]\n",
+        "print(df)\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "c28wywWfkGkL"
+      },
+      "source": [
+        "**Question 10:** Replace the integer values in the `Pclass` columns with corresponding string data types. For example, replace 1 with 'Upper', 2 with 'Middle' and 3 with 'Lower'"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "wMESNNl2kGkM"
+      },
+      "outputs": [],
+      "source": [
+        "#Enter code here"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "UzxBnBBMkGkM"
+      },
+      "source": [
+        "**Question 11:** Using a pivot table, represent the male and female passengers in each of the three passenger classes."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 117,
+      "metadata": {
+        "id": "BG7WPH-hkGkN",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 220
+        },
+        "outputId": "7878555f-425a-4ade-9541-0a261b3f10b0"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Empty DataFrame\n",
+              "Columns: []\n",
+              "Index: [(female, 1), (female, 2), (female, 3), (male, 1), (male, 2)]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-171c8872-65b9-4a51-bc5d-b1eccd688814\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>sex</th>\n",
+              "      <th>pclass</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th rowspan=\"3\" valign=\"top\">female</th>\n",
+              "      <th>1</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th rowspan=\"2\" valign=\"top\">male</th>\n",
+              "      <th>1</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-171c8872-65b9-4a51-bc5d-b1eccd688814')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-171c8872-65b9-4a51-bc5d-b1eccd688814 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-171c8872-65b9-4a51-bc5d-b1eccd688814');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-2e6cd965-4a1c-44cf-beac-52e784b93085\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-2e6cd965-4a1c-44cf-beac-52e784b93085')\"\n",
+              "            title=\"Suggest charts.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-2e6cd965-4a1c-44cf-beac-52e784b93085 button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 117
+        }
+      ],
+      "source": [
+        "#Enter code here\n",
+        "df_main[['sex','pclass']].groupby(['sex','pclass']).agg('sum').head()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "jXxKMFytkGkN"
+      },
+      "source": [
+        "**Question 12 Part A:** Make a new column which classifies ages as the following: '0-20', '20-50' and '50-90'"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 134,
+      "metadata": {
+        "id": "8ORAXmW-kGkP"
+      },
+      "outputs": [],
+      "source": [
+        "#Enter code here\n",
+        "# df_main['age_category'] = df_main['age'].apply(df_main)\n",
+        "\n",
+        "# print(df_main)\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "gtHt8zMTkGkQ"
+      },
+      "source": [
+        "**Question 12 Part B:** Using this new column, make a pivot table that represents how many males and females had survived in each age group."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "6IfvRWI6kGkQ"
+      },
+      "outputs": [],
+      "source": [
+        "#Enter code here"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "d27nfxqNWotP"
+      },
+      "source": [
+        "**Question 13 Part A:** Calculate the average age of passengers by their sex and Pclass."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Mqb6oHSEWotP"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "nXWwZYxZWotP"
+      },
+      "source": [
+        "Find the total fare paid by passengers based on their Pclass and embarked port."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "8aCprMEKWotP"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "22xffLuQWotP"
+      },
+      "source": [
+        "Find the number of passengers who survived and died based on their Pclass and cabin type."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "uychn7yEWotP"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "WhuoTpshWotc"
+      },
+      "source": [
+        "Group passengers by their embarked port and calculate the median fare for each port."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Kx1Cqwt0kGkR"
+      },
+      "source": [
+        "**Congratulations on completing your first assignment!**"
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3 (ipykernel)",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.11.4"
+    },
+    "vscode": {
+      "interpreter": {
+        "hash": "31f2aee4e71d21fbe5cf8b01ff0e069b9275f58929596ceb00d14d90e3e16cd6"
+      }
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
